@@ -1,15 +1,18 @@
 import os
 import requests
 
-
-def push_message(send_key, title, body):
-    url = 'https://sc.ftqq.com/{}.send'.format(send_key)
-    data = {
-        'text': title,
-        'desp': body,
-    }
-    requests.post(url=url, data=data)
-
+def sc_send(send_key, title, body):
+    url = f'https://sctapi.ftqq.com/{send_key}.send'
+    data = {'text': title, 'desp': body}
+    
+    response = requests.post(url, data=data)
+    
+    if response.status_code == 200:
+        result = response.text
+    else:
+        result = f"方糖酱推送错误 - Status code: {response.status_code}"
+    
+    return result
 
 def main():
     user_info = os.environ['USER_INFO']
@@ -26,8 +29,8 @@ def main():
     message = res.content.decode('unicode_escape')
     print(message)
     if send_key:
-        push_message(send_key, "SSPanel报名结果", message)
-
-
+#    if ('您获得了' not in message) and send_key:
+        ret = sc_send(send_key, "SSPanel报名结果", message)
+        print(ret)
 if __name__ == "__main__":
     main()
