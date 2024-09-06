@@ -1,7 +1,7 @@
 name: 保持活动状态
 on:
   schedule:
-    - cron: "0 0 1 * *"
+    - cron: "0 0 */7 * *"
 
 jobs:
   main:
